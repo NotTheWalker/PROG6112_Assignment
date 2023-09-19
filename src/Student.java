@@ -49,12 +49,16 @@ public class Student {
         return input.equals(c);
     }
 
-    private static int parseAndValidate(int lower, int upper) {
+    private static int parseAndValidate(String message, int lower, int upper) {
         //take integer input from user and validate it
         int input = parseInt();
         if(rangeValidate(input, lower, upper)) return input;
-        System.out.println("Invalid input!");
-        return parseAndValidate(lower, upper);
+        System.out.println(message);
+        return parseAndValidate(message, lower, upper);
+    }
+
+    private static int parseAndValidate(int lower, int upper) {
+        return parseAndValidate("Invalid input!", lower, upper);
     }
 
     private static int parseInt() {
@@ -85,32 +89,32 @@ public class Student {
         }
     }
 
-    private static void saveStudent() {
-        //take input from user anc create a student object
+    public static void saveStudent() {
+        //take input from user and create a student object
         Scanner sc = new Scanner(System.in);
         String banner = "CAPTURE A NEW STUDENT";
         System.out.println(banner);
         System.out.println("*".repeat(banner.length()));
-        System.out.println("Enter the student id: ");
+        System.out.print("Enter the student id: ");
         int id = parseAndValidate(ID_LOWER_BOUND, ID_UPPER_BOUND);
-        System.out.println("Enter the student name: ");
+        System.out.print("Enter the student name: ");
         String name = sc.nextLine();
-        System.out.println("Enter the student age: ");
-        int age = parseAndValidate(15, 120);
-        System.out.println("Enter the student email: ");
+        System.out.print("Enter the student age: ");
+        int age = parseAndValidate("You have entered an incorrect student age!!!\nPlease re-enter the student age",15, 120);
+        System.out.print("Enter the student email: ");
         String email = sc.nextLine();
-        System.out.println("Enter the student course: ");
+        System.out.print("Enter the student course: ");
         String course = sc.nextLine();
         StudentDetails student = new StudentDetails(id, name, age, email, course);
         studentRecords.put(id, student);
     }
 
-    private static void searchStudent() {
+    public static void searchStudent() {
         //take ID from user and search for the student
         String banner = "SEARCH FOR A STUDENT";
         System.out.println(banner);
         System.out.println("-".repeat(banner.length()));
-        System.out.println("Enter the student id: ");
+        System.out.print("Enter the student id: ");
         int id = parseAndValidate(ID_LOWER_BOUND, ID_UPPER_BOUND);
         StudentDetails student = studentRecords.get(id);
         if(student == null) {
@@ -120,19 +124,19 @@ public class Student {
         printStudentRecord(student);
     }
 
-    private static void deleteStudent() {
+    public static void deleteStudent() {
         //take ID from user and delete the student
         String banner = "DELETE A STUDENT";
         System.out.println(banner);
         System.out.println("-".repeat(banner.length()));
-        System.out.println("Enter the student id to delete: ");
+        System.out.print("Enter the student id to delete: ");
         int id = parseAndValidate(ID_LOWER_BOUND, ID_UPPER_BOUND);
         StudentDetails student = studentRecords.get(id);
         if (student == null) {
             System.out.println("Student with id: " + id + " not found.");
             return;
         }
-        System.out.println("Are you sure you want to delete student with id: " + id + "? (y)");
+        System.out.println("Are you sure you want to delete student with id: " + id + "? (y) ");
         if(confirm("y")) {
             studentRecords.remove(id);
             System.out.println("Student with id: " + id + " deleted.");
