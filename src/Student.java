@@ -11,6 +11,8 @@ public class Student {
             "Print student report",
             "Exit Application."
     };
+
+    private static final Scanner scanner = new Scanner(System.in);
     private static final int ID_LOWER_BOUND = 9999;
     private static final int ID_UPPER_BOUND = 100000;
 
@@ -36,7 +38,7 @@ public class Student {
 
     }
 
-    private static void printBanner() {
+    public static void printBanner() {
         String banner = "STUDENT MANAGEMENT APPLICATION";
         System.out.println(banner);
         System.out.println("*".repeat(banner.length()));
@@ -44,8 +46,7 @@ public class Student {
 
     private static boolean confirm(String c) {
         //take input from user and validate it
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
+        String input = scanner.nextLine();
         return input.equals(c);
     }
 
@@ -59,10 +60,9 @@ public class Student {
 
     private static int parseInt() {
         //take input from user and parse it to integer
-        Scanner sc = new Scanner(System.in);
         String input;
         int inputNum;
-        input = sc.nextLine();
+        input = scanner.nextLine();
         try {
             inputNum = Integer.parseInt(input);
         } catch (Exception e) {
@@ -85,27 +85,26 @@ public class Student {
         }
     }
 
-    private static void saveStudent() {
+    public static void saveStudent() {
         //take input from user anc create a student object
-        Scanner sc = new Scanner(System.in);
         String banner = "CAPTURE A NEW STUDENT";
         System.out.println(banner);
         System.out.println("*".repeat(banner.length()));
         System.out.println("Enter the student id: ");
         int id = parseAndValidate(ID_LOWER_BOUND, ID_UPPER_BOUND);
         System.out.println("Enter the student name: ");
-        String name = sc.nextLine();
+        String name = scanner.nextLine();
         System.out.println("Enter the student age: ");
         int age = parseAndValidate(15, 120);
         System.out.println("Enter the student email: ");
-        String email = sc.nextLine();
+        String email = scanner.nextLine();
         System.out.println("Enter the student course: ");
-        String course = sc.nextLine();
+        String course = scanner.nextLine();
         StudentDetails student = new StudentDetails(id, name, age, email, course);
         studentRecords.put(id, student);
     }
 
-    private static void searchStudent() {
+    public static void searchStudent() {
         //take ID from user and search for the student
         String banner = "SEARCH FOR A STUDENT";
         System.out.println(banner);
@@ -120,7 +119,7 @@ public class Student {
         printStudentRecord(student);
     }
 
-    private static void deleteStudent() {
+    public static void deleteStudent() {
         //take ID from user and delete the student
         String banner = "DELETE A STUDENT";
         System.out.println(banner);
@@ -163,6 +162,7 @@ public class Student {
     public static void ExitStudentApplication() {
         //exit the application
         System.out.println("Exiting application...");
+        scanner.close();
         System.exit(0);
     }
 }
