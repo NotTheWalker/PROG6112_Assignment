@@ -16,6 +16,9 @@ public class Student {
     private static final int ID_LOWER_BOUND = 9999;
     private static final int ID_UPPER_BOUND = 100000;
 
+    /**
+     * Worker call method
+     */
     public static void start() {
         printBanner();
         while(true) {
@@ -85,6 +88,9 @@ public class Student {
         }
     }
 
+    /**
+     * Prompts user for information pertaining to a new student before saving to student records object
+     */
     public static void saveStudent() {
         //take input from user anc create a student object
         String banner = "CAPTURE A NEW STUDENT";
@@ -104,6 +110,9 @@ public class Student {
         studentRecords.put(id, student);
     }
 
+    /**
+     * Prompts user for student id before returning matching student's record or an error statement if no match found
+     */
     public static void searchStudent() {
         //take ID from user and search for the student
         String banner = "SEARCH FOR A STUDENT";
@@ -111,7 +120,7 @@ public class Student {
         System.out.println("-".repeat(banner.length()));
         System.out.println("Enter the student id: ");
         int id = parseAndValidate(ID_LOWER_BOUND, ID_UPPER_BOUND);
-        StudentDetails student = studentRecords.get(id);
+        StudentDetails student = studentRecords.get(id); //TODO: investigate monad implementation
         if(student == null) {
             System.out.println("Student with id: " + id + " not found.");
             return;
@@ -119,6 +128,9 @@ public class Student {
         printStudentRecord(student);
     }
 
+    /**
+     * Prompts user for student id and confirms intent before deleting matching student or an error statement if no match found
+     */
     public static void deleteStudent() {
         //take ID from user and delete the student
         String banner = "DELETE A STUDENT";
@@ -140,6 +152,9 @@ public class Student {
         System.out.println("Student deletion cancelled.");
     }
 
+    /**
+     * Prints a student's information
+     */
     public static void studentReport() {
         //display report for every student
         String banner = "STUDENT REPORT";
@@ -159,6 +174,9 @@ public class Student {
         System.out.println("STUDENT COURSE: " + student.course);
     }
 
+    /**
+     * Exits the application
+     */
     public static void ExitStudentApplication() {
         //exit the application
         System.out.println("Exiting application...");
@@ -166,14 +184,29 @@ public class Student {
         System.exit(0);
     }
 
+    /**
+     * Helper function for testing by directly adding to student record
+     * @param id
+     * @param name
+     * @param age
+     * @param email
+     * @param course
+     */
     public static void addStudent(Integer id, String name, int age, String email, String course) {
         studentRecords.put(id, new StudentDetails(id, name, age, email, course));
     }
 
+    /**
+     * Helper function for testing
+     * @return the number of student records
+     */
     public static int getStudentRecordLength() {
         return studentRecords.size();
     }
 
+    /**
+     *  Helper function for testing by resetting static members to default state
+     */
     public static void reset() {
         resetScanner();
         resetRecords();
