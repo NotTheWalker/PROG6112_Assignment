@@ -12,7 +12,7 @@ public class Student {
             "Exit Application."
     };
 
-    private static final Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner = new Scanner(System.in);
     private static final int ID_LOWER_BOUND = 9999;
     private static final int ID_UPPER_BOUND = 100000;
 
@@ -30,7 +30,7 @@ public class Student {
                 case 1 -> saveStudent();
                 case 2 -> searchStudent();
                 case 3 -> deleteStudent();
-                case 4 -> StudentReport();
+                case 4 -> studentReport();
                 case 5 -> ExitStudentApplication();
             }
             System.out.println("*".repeat(50));
@@ -38,7 +38,7 @@ public class Student {
 
     }
 
-    public static void printBanner() {
+    private static void printBanner() {
         String banner = "STUDENT MANAGEMENT APPLICATION";
         System.out.println(banner);
         System.out.println("*".repeat(banner.length()));
@@ -140,7 +140,7 @@ public class Student {
         System.out.println("Student deletion cancelled.");
     }
 
-    public static void StudentReport() {
+    public static void studentReport() {
         //display report for every student
         String banner = "STUDENT REPORT";
         System.out.println(banner);
@@ -164,5 +164,29 @@ public class Student {
         System.out.println("Exiting application...");
         scanner.close();
         System.exit(0);
+    }
+
+    public static void addStudent(Integer id, String name, int age, String email, String course) {
+        studentRecords.put(id, new StudentDetails(id, name, age, email, course));
+    }
+
+    public static int getStudentRecordLength() {
+        return studentRecords.size();
+    }
+
+    public static void reset() {
+        resetScanner();
+        resetRecords();
+    }
+
+    private static void resetScanner() {
+        scanner.close();
+        scanner = new Scanner(System.in);
+    }
+
+    private static void resetRecords() {
+        for(Integer id : studentRecords.keySet()) {
+            studentRecords.remove(id);
+        }
     }
 }

@@ -2,10 +2,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +10,6 @@ public class StudentTest {
     private final InputStream systemIn = System.in;
     private final PrintStream systemOut = System.out;
 
-    private ByteArrayInputStream testIn;
     private ByteArrayOutputStream testOut;
 
     @BeforeEach
@@ -29,12 +25,16 @@ public class StudentTest {
     }
 
     private void provideInput(String data) {
-        testIn = new ByteArrayInputStream(data.getBytes());
+        ByteArrayInputStream testIn = new ByteArrayInputStream(data.getBytes());
         System.setIn(testIn);
     }
 
     private String getOutput() {
         return testOut.toString().replace("\r","");
+    }
+
+    private void addDefaultStudent() {
+        Student.addStudent(54333, "Caleb", 23, "foo@bar.gov", "PROG6212");
     }
 
     @Test
@@ -58,7 +58,23 @@ public class StudentTest {
                         Enter the student email:\s
                         Enter the student course:\s
                         """;
+        Student.reset();
         Student.saveStudent();
+        assertEquals(expectedOutput, getOutput());
+        assertEquals(1, Student.getStudentRecordLength());
+    }
+
+    @Test
+    public void testSearchStudentEmpty() {
+        provideInput("54333");
+        final String expectedOutput = """
+                SEARCH FOR A STUDENT
+                --------------------
+                Enter the student id:\s
+                Student with id: 54333 not found.
+                """;
+        Student.reset();
+        Student.searchStudent();
         assertEquals(expectedOutput, getOutput());
     }
 
@@ -69,9 +85,98 @@ public class StudentTest {
                 SEARCH FOR A STUDENT
                 --------------------
                 Enter the student id:\s
+                STUDENT ID: 54333
+                STUDENT NAME: Caleb
+                STUDENT AGE: 23
+                STUDENT EMAIL: foo@bar.gov
+                STUDENT COURSE: PROG6212
+                """;
+        Student.reset();
+        addDefaultStudent();
+        Student.searchStudent();
+        assertEquals(expectedOutput, getOutput());
+    }
+
+    @Test
+    public void testDeleteStudentEmpty() {
+        provideInput("54333");
+        final String expectedOutput = """
+                DELETE A STUDENT
+                ----------------
+                Enter the student id to delete:\s
                 Student with id: 54333 not found.
                 """;
-        Student.searchStudent();
+        Student.reset();
+        Student.deleteStudent();
+        assertEquals(expectedOutput, getOutput());
+    }
+
+    @Test
+    public void testDeleteStudentAffirm() {
+        provideInput("""
+                        54333
+                        y
+                        """);
+        final String expectedOutput = """
+                DELETE A STUDENT
+                ----------------
+                Enter the student id to delete:\s
+                Are you sure you want to delete student with id: 54333? (y)
+                Student with id: 54333 deleted.
+                """;
+        Student.reset();
+        addDefaultStudent();
+        Student.deleteStudent();
+        assertEquals(expectedOutput, getOutput());
+        assertEquals(0, Student.getStudentRecordLength());
+    }
+
+    @Test
+    public void testDeleteStudentCancel() {
+        provideInput("""
+                        54333
+                        n
+                        """);
+        final String expectedOutput = """
+                DELETE A STUDENT
+                ----------------
+                Enter the student id to delete:\s
+                Are you sure you want to delete student with id: 54333? (y)
+                Student deletion cancelled.
+                """;
+        Student.reset();
+        addDefaultStudent();
+        Student.deleteStudent();
+        assertEquals(expectedOutput, getOutput());
+        assertEquals(1, Student.getStudentRecordLength());
+    }
+
+    @Test
+    public void testStudentReportEmpty() {
+        final String expectedOutput = """
+                STUDENT REPORT
+                --------------------------------------------------------
+                """;
+        Student.reset();
+        Student.studentReport();
+        assertEquals(expectedOutput, getOutput());
+    }
+
+    @Test
+    public void testStudentReport() {
+        final String expectedOutput = """
+                STUDENT REPORT
+                --------------------------------------------------------
+                STUDENT ID: 54333
+                STUDENT NAME: Caleb
+                STUDENT AGE: 23
+                STUDENT EMAIL: foo@bar.gov
+                STUDENT COURSE: PROG6212
+                --------------------------------------------------------
+                """;
+        Student.reset();
+        addDefaultStudent();
+        Student.studentReport();
         assertEquals(expectedOutput, getOutput());
     }
 
