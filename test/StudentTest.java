@@ -1,10 +1,8 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
 public class StudentTest {
     private final InputStream systemIn = System.in;
@@ -12,13 +10,13 @@ public class StudentTest {
 
     private ByteArrayOutputStream testOut;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         testOut = new ByteArrayOutputStream();
         System.setOut(new PrintStream(testOut));
     }
 
-    @AfterEach
+    @After
     public void tearDown(){
         System.setIn(systemIn);
         System.setOut(systemOut);
